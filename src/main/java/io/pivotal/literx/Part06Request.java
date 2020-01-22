@@ -17,30 +17,39 @@ public class Part06Request {
 
 //========================================================================================
 
-	// TODO Create a StepVerifier that initially requests all values and expect 4 values to be received
+	// Create a StepVerifier that initially requests all values and expect 4 values to be received
 	StepVerifier requestAllExpectFour(Flux<User> flux) {
-		return null;
+		return StepVerifier.create(flux).expectNextCount(4).expectComplete();
 	}
 
 //========================================================================================
 
-	// TODO Create a StepVerifier that initially requests 1 value and expects User.SKYLER then requests another value and expects User.JESSE.
+	// Create a StepVerifier that initially requests 1 value and expects User.SKYLER then requests another value and expects User.JESSE.
 	StepVerifier requestOneExpectSkylerThenRequestOneExpectJesse(Flux<User> flux) {
-		return null;
+		return StepVerifier
+				.create(flux)
+				.expectNextMatches(user -> user.equals(User.SKYLER))
+				.expectNextMatches(user -> user.equals(User.JESSE))
+				.thenCancel();
 	}
 
 //========================================================================================
 
-	// TODO Return a Flux with all users stored in the repository that prints automatically logs for all Reactive Streams signals
+	// Return a Flux with all users stored in the repository that prints automatically logs for all Reactive Streams signals
 	Flux<User> fluxWithLog() {
-		return null;
+		return Flux.from(repository.findAll())
+				.doOnSubscribe(System.out::println);
+
 	}
 
 //========================================================================================
 
-	// TODO Return a Flux with all users stored in the repository that prints "Starring:" on subscribe, "firstname lastname" for all values and "The end!" on complete
+	// Return a Flux with all users stored in the repository that prints "Starring:" on subscribe, "firstname lastname" for all values and "The end!" on complete
 	Flux<User> fluxWithDoOnPrintln() {
-		return null;
+		return Flux.from(repository.findAll())
+				.doOnSubscribe(user -> System.out.println("Starring:"))
+				.doOnNext(user -> System.out.println(user.getFirstname() + " " + user.getLastname()))
+				.doOnComplete(() -> System.out.println("The end!"));
 	}
 
 }

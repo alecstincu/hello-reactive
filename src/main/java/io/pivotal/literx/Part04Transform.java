@@ -26,7 +26,7 @@ public class Part04Transform {
 //========================================================================================
 
 	Flux<User> asyncCapitalizeMany(Flux<User> flux) {
-		return flux.flatMap(u -> asyncCapitalizeUser(u));
+		return flux.flatMap(this::asyncCapitalizeUser);
 	}
 
 	Mono<User> asyncCapitalizeUser(User u) {
